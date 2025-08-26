@@ -293,6 +293,25 @@ namespace Calculator
                 Display = result.ToString();
                 CalcExp += " = " + Display;
 
+                string formattedResult;
+
+                // 정수인지 여부 확인
+                if (Math.Abs(result % 1) < double.Epsilon)
+                {
+                    // 정수 → 천 단위 구분 기호
+                    formattedResult = ((long)result).ToString("N0");
+                }
+                else
+                {
+                    // 소수 → 천 단위 + 소수점 4자리
+                    formattedResult = result.ToString("N4");
+                }
+
+                // 결과를 Display에 적용
+                Display = formattedResult;
+                CalcExp = _topDisplay;
+
+
                 if (_operatorStack.Count == 0)
                 {
                     _lastNum = currentNumber;
