@@ -1,4 +1,5 @@
 📌 Calculator App (WPF, .NET Framework)
+
 🖥️ 소개
 
 이 프로젝트는 WPF(.NET Framework) 기반의 계산기 애플리케이션입니다.
