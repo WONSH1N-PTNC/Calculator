@@ -4,43 +4,86 @@
         Title="계정 관리 노트"
         Height="500" Width="500"
         Background="Black"
-        Foreground="White"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        
+        >
+    
+    
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <!-- 상단 버튼 영역 -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,0,10">
-            <Button Content="조회" Click="QueryButton_Click"
+                <!-- 상단 버튼 영역 -->
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,0,10">
+                    <Button Content="조회" Click="QueryButton_Click"
                     Margin="5,0" Padding="10,5"
-                    Background="Transparent" BorderBrush="White" BorderThickness="1" Foreground="White"/>
-            <Button Content="삭제" Click="DeleteButton_Click"
+                    BorderThickness="1" Width="30"
+                    Style="{StaticResource BaseButtonStyle}"/>
+                    <Button x:Name="DeleteButton" Content="삭제" Click="DeleteButton_Click"
                     Margin="5,0" Padding="10,5"
-                    Background="Transparent" BorderBrush="White" BorderThickness="1" Foreground="White"/>
-        </StackPanel>
+                    BorderThickness="1" Width="30"
+                    Style="{StaticResource BaseButtonStyle}"/>
+                </StackPanel>
 
-        <!-- 계정 목록 테이블 -->
-        <DataGrid x:Name="AccountDataGrid"
+                <!-- 계정 목록 테이블 -->
+                <DataGrid x:Name="AccountDataGrid"
                   Grid.Row="1"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  HeadersVisibility="Column"
+                  HeadersVisibility="All"
                   SelectionMode="Single"
                   Background="Black"
                   Foreground="Black"
                   BorderBrush="Gray"
-                  GridLinesVisibility="Horizontal"
+                  GridLinesVisibility="None"
                   RowHeaderWidth="0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*"/>
-                <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="2*"/>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="2*"/>
-                <DataGridTextColumn Header="Authority" Binding="{Binding Authority}" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderBrush" Value="Gray"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,0"></Setter>
+                        </Style>
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#666666"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="BorderBrush" Value="Gray"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*"/>
+                        <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="1.2*"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2.3*"/>
+                        <DataGridTextColumn Header="Authority" Binding="{Binding Authority}" Width="*"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=\{0:yyyy-MM-dd HH:mm\}}" Width="2*"/>
+                    </DataGrid.Columns>
+
+                    <!-- 행 스타일 -->
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="#666666"/>
+                            <!-- 행 배경 -->
+                            <Setter Property="Foreground" Value="LightGray"/>
+                            <!-- 글씨 -->
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <!-- 선택 시 색상 변경 -->
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="DarkOrange"/>
+                                    <Setter Property="Foreground" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                </DataGrid>
+            </Grid>
+       
 </Window>

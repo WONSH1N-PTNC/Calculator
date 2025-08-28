@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/DevExpress.Xpf.Core.v24.1;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="/Style/CalculatorStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

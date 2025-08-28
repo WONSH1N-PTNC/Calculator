@@ -43,7 +43,10 @@ namespace Calculator.ViewModel
             public string CalExp { get; set; } // 계산식
             public string Display { get; set; } // 표시할 결과
         }
-
+        public void ClearNotes()
+        {
+            Notes.Clear();
+        }
        
         protected void OnPropertyChanged(string propertyName) =>
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

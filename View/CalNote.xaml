@@ -44,13 +44,12 @@
                             <Button Content="삭제"
                                     Grid.Column="1"
                                     Margin="10,0,0,0"
-                                    Foreground="White"
-                                    Background="Transparent"
-                                    BorderBrush="White"
                                     BorderThickness="1"
                                     Padding="5,2"
                                     Cursor="Hand"
-                                    Click="DelNote_Click"/>
+                                    Click="DelNote_Click"
+                                    Width="30"
+                                    Style="{StaticResource BaseButtonStyle}"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

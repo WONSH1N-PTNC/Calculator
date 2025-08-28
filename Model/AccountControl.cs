@@ -13,5 +13,6 @@ namespace Calculator.Model
         public string Password { get; set; } 
         public DateTime Date { get; set; } 
         public string Authority { get; set; } // admin, user, guest
+        public string Email { get; set; }
     }
 }

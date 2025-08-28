@@ -32,42 +32,60 @@ namespace Calculator
             };
         }
 
-
-
         // 화면 이동
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
             MenuPopup.IsOpen = true;
         }
-        private void OpenLoginWindow()
-        {
-            var loginView = new Login(); // View
-            loginView.DataContext = new LoginControl(); // ViewModel 연결
-
-
-            loginView.Owner = this;
-            loginView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            loginView.ShowDialog(); // 모달로 띄우기
-        }
+      
+        // 창 토글 기능 추가
+        private Account _accountWindow;
         private void OpenAccountWindow()
         {
-            var accountView = new Account(); // View
-            accountView.DataContext = new AccountControl(); // ViewModel 연결
+            if (SessionManager.Authority == "guest")
+            {
+                MessageBox.Show("게스트는 접근할 수 없습니다.");
+                return;
+            }
 
-            PositionWindowRightOfMain(accountView);
-            accountView.Owner = this;
-            accountView.Show();
+            if (_accountWindow == null || !_accountWindow.IsLoaded)
+            {
+                _accountWindow = new Account();
+                _accountWindow.DataContext = new AccountControl();
+                PositionWindowRightOfMain(_accountWindow);
+                _accountWindow.Owner = this;
+                _accountWindow.Closed += (s, e) => _accountWindow = null; // 닫히면 참조 해제
+                _accountWindow.Show();
+            }
+            else
+            {
+                _accountWindow.Close(); 
+            }
         }
+        private CalNote _calNoteWindow;
         private void OpenCalNoteWindow()
         {
-            
-           var _calNoteWindow = new CalNote(_calNoteViewModel); // View
+            if (SessionManager.Authority == "guest")
+            {
+                MessageBox.Show("게스트는 접근할 수 없습니다.");
+                return;
+            }
 
-            PositionWindowRightOfMain(_calNoteWindow);
-            _calNoteWindow.Owner = this;
-            _calNoteWindow.Show();
+            if (_calNoteWindow == null || !_calNoteWindow.IsLoaded)
+            {
+                _calNoteWindow = new CalNote(_calNoteViewModel);
+                PositionWindowRightOfMain(_calNoteWindow);
+                _calNoteWindow.Owner = this;
+                _calNoteWindow.Closed += (s, e) => _calNoteWindow = null; 
+                _calNoteWindow.Show();
+            }
+            else
+            {
+                _calNoteWindow.Close(); 
+            }
         }
 
+        // 메뉴 리스트 
         private void MenuListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0)
@@ -93,7 +111,7 @@ namespace Calculator
 
             }
 
-    (sender as ListBox).SelectedIndex = -1;
+         (sender as ListBox).SelectedIndex = -1;
         }
         private void PositionWindowRightOfMain(Window newWindow)
         {
@@ -114,10 +132,6 @@ namespace Calculator
             newWindow.Top = mainTop;
         }
 
-        private void CalDisplay_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
         private bool _isLoggedIn = false;
 
         private void CheckLoginStatus()
@@ -132,8 +146,20 @@ namespace Calculator
 
             if (!_isLoggedIn)
             {
-                OpenLoginWindow();
-                _isLoggedIn = true; // 로그인 성공 가정
+                var loginWindow = new Login();
+                loginWindow.Owner = this;
+                loginWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                
+                bool? result = loginWindow.ShowDialog();
+
+                if (result == true)
+                {
+                    _isLoggedIn = true; // 로그인 성공 
+                }
+                else
+                {
+                    _isLoggedIn = false;
+                }
             }
             else
             {
@@ -149,6 +175,22 @@ namespace Calculator
                 if (result == MessageBoxResult.Yes)
                 {
                     _isLoggedIn = false; // 로그아웃 처리
+                    SessionManager.Authority = "guest"; // 권한 초기화
+                    SessionManager.CurrentUserId = null; // 사용자 정보 초기화
+
+                    if (_accountWindow != null && _accountWindow.IsLoaded)
+                    {
+                        _accountWindow.Close();
+                        _accountWindow = null;
+                    }
+                    _calNoteViewModel.ClearNotes();
+                    if (_calNoteWindow != null && _calNoteWindow.IsLoaded)
+                    {
+                        _calNoteWindow.Close();
+                        _calNoteWindow = null;
+
+                    }
+                    _calViewModel.ClearCommand.Execute("CA");
                     CheckLoginStatus();
                 }
             }
@@ -157,15 +199,7 @@ namespace Calculator
                 MessageBox.Show("로그인되어 있지 않습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-    
-        // 메모지 기능
-        private CalNote _calNoteWindow;
-       
 
-        /// <summary>
-        /// 계산 결과를 메모지 창에 추가
-        /// </summary>
-       
         private void btnEqual_Click(object sender, RoutedEventArgs e)
         {
             // 계산 후 메모지에 추가
@@ -173,10 +207,8 @@ namespace Calculator
         }
         private void ViewModel_CalculationCompleted(object sender, EventArgs e)
         {
-           // AddToNote(); 
+            // AddToNote(); 
         }
     }
-
-
 }
 
