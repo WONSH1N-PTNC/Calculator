@@ -53,6 +53,7 @@ CalculatorApp/
  ├─ Resources/     # 공통 스타일 및 리소스
  └─ App.xaml       # 앱 시작점
 
+```
 ---
   
 🛠️ 개발 환경
